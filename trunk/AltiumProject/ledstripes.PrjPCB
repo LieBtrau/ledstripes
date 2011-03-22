@@ -2,7 +2,7 @@
 Version=1.0
 HierarchyMode=0
 ChannelRoomNamingStyle=0
-OutputPath=
+OutputPath=Project Outputs for ledstripes
 LogFolderPath=
 ChannelDesignatorFormatString=$Component_$RoomName
 ChannelRoomLevelSeperator=_
@@ -56,7 +56,26 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
+[Document3]
+DocumentPath=D'tron.OutJob
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+
 [GeneratedDocument1]
+DocumentPath=Project Outputs for ledstripes\Design Rule Check - ledstripes.html
+DItemRevisionGUID=
+
+[GeneratedDocument2]
 DocumentPath=Project Outputs for ledstripes\Move Component(s) Origin To Grid - ledstripes.html
 DItemRevisionGUID=
 
@@ -69,8 +88,12 @@ Name=PCB_Nr
 Value=BRD110313/0
 
 [Parameter3]
+Name=ProjectName
+Value=LedStripes_LightTree
+
+[Parameter4]
 Name=RevisionNr
-Value=R000a
+Value=R000
 
 [OutputGroup1]
 Name=Netlist Outputs
