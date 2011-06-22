@@ -53,10 +53,10 @@ AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=-1
+AnnotateOrder=0
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
+ClassGenCCAutoEnabled=0
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
@@ -78,13 +78,17 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 
+[GeneratedDocument1]
+DocumentPath=Project Outputs for ledstripes\Design Rule Check - ledstripes.html
+DItemRevisionGUID=
+
 [Parameter1]
 Name=DrawnByX
 Value=CT
 
 [Parameter2]
 Name=PCB_Nr
-Value=BRD110313/0
+Value=BRD110313/1
 
 [Parameter3]
 Name=ProjectName
@@ -92,7 +96,7 @@ Value=LedStripes_LightTree
 
 [Parameter4]
 Name=RevisionNr
-Value=R000
+Value=R1.00
 
 [PCBConfiguration1]
 ReleaseItemId=
@@ -897,9 +901,40 @@ NetClassManualEnabled=0
 [LibraryUpdateOptions]
 SelectedOnly=0
 PartTypes=0
+ComponentLibIdentifierKind0=Library Name And Type
+ComponentLibraryIdentifier0=Testing.SVNDBLib/Testing_SchLib
+ComponentDesignItemID0=BC847
+ComponentSymbolReference0=Q_NPN_1
+ComponentUpdate0=1
+ComponentIsDeviceSheet0=0
+ComponentLibIdentifierKind1=Library Name And Type
+ComponentLibraryIdentifier1=Testing.SVNDBLib/Testing_SchLib
+ComponentDesignItemID1=CNFLC08F_TBD
+ComponentSymbolReference1=J_8P
+ComponentUpdate1=1
+ComponentIsDeviceSheet1=0
+ComponentLibIdentifierKind2=Library Name And Type
+ComponentLibraryIdentifier2=Testing.SVNDBLib/Testing_SchLib
+ComponentDesignItemID2=NECM325C
+ComponentSymbolReference2=D_LED_RGB
+ComponentUpdate2=1
+ComponentIsDeviceSheet2=0
+ComponentLibIdentifierKind3=Library Name And Type
+ComponentLibraryIdentifier3=Testing.SVNDBLib/Testing_SchLib
+ComponentDesignItemID3=YRES220_1206
+ComponentSymbolReference3=R_RES
+ComponentUpdate3=1
+ComponentIsDeviceSheet3=0
+ComponentLibIdentifierKind4=Library Name And Type
+ComponentLibraryIdentifier4=Testing.SVNDBLib/Testing_SchLib
+ComponentDesignItemID4=YRES430E_TBD
+ComponentSymbolReference4=R_RES
+ComponentUpdate4=1
+ComponentIsDeviceSheet4=0
 FullReplace=1
 UpdateDesignatorLock=1
 UpdatePartIDLock=1
+PreserveParameterLocations=1
 DoGraphics=1
 DoParameters=1
 DoModels=1
@@ -908,6 +943,36 @@ RemoveParameters=0
 AddModels=1
 RemoveModels=1
 UpdateCurrentModels=1
+ParameterName0=Comment
+ParameterUpdate0=1
+ParameterName1=Component Kind
+ParameterUpdate1=1
+ParameterName2=Component Type
+ParameterUpdate2=1
+ParameterName3=Description
+ParameterUpdate3=1
+ParameterName4=Library Reference
+ParameterUpdate4=1
+ParameterName5=Manufacturer
+ParameterUpdate5=1
+ParameterName6=Order Code
+ParameterUpdate6=1
+ParameterName7=Part Number
+ParameterUpdate7=1
+ModelTypeGroup0=PCBLIB
+ModelTypeUpdate0=1
+ModelType0=PCBLIB
+ModelName0=D_NECM325C
+ModelUpdate0=1
+ModelType1=PCBLIB
+ModelName1=J_215079-8
+ModelUpdate1=1
+ModelType2=PCBLIB
+ModelName2=R_1206
+ModelUpdate2=1
+ModelType3=PCBLIB
+ModelName3=SOT23
+ModelUpdate3=1
 
 [DatabaseUpdateOptions]
 SelectedOnly=0
