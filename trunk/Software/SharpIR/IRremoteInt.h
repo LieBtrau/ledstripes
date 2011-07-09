@@ -59,9 +59,15 @@
 #define RC6_T1		444
 #define RC6_RPT_LENGTH	46000
 
-#define SHARP_BIT_MARK		500
-#define SHARP_ONE_SPACE		1500
-#define SHARP_ZERO_SPACE	500
+//Values for GP1U5
+//#define SHARP_BIT_MARK		500
+//#define SHARP_ONE_SPACE		1500
+//#define SHARP_ZERO_SPACE	500
+
+//Values for TSOP34838
+#define SHARP_BIT_MARK		250  //250 or 300
+#define SHARP_ONE_SPACE		1800 //1850 or 1800
+#define SHARP_ZERO_SPACE	750  //750 or 800
 
 #define TOLERANCE 25  // percent tolerance in measurements
 #define LTOL (1.0 - TOLERANCE/100.) 

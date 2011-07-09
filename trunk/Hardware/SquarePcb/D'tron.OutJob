@@ -153,15 +153,23 @@ Configuration6_Item3=Comment=True|Footprint=True
 Configuration6_Name4=SortOrder
 Configuration6_Item4=Designator=Up|Comment=Up|Footprint=Up
 Configuration6_Name5=VisibleOrder
+<<<<<<< .mine
+Configuration6_Item5=Comment=100|Designator=100|Quantity=100|Order Code=100
+=======
 Configuration6_Item5=Designator=100|LibRef=100|Quantity=100|Order Code=100
+>>>>>>> .r20
 
 [PublishSettings]
+<<<<<<< .mine
+OutputFilePath2=C:\Users\ct\Documents\PersonalProjects\ledstripes\Hardware\SquarePcb\.\Publish To PDF\LedStripes_R200.PDF
+=======
 OutputFilePath2=C:\data\PersonalProjects\ledstripes\Hardware\SquarePcb\.\Publish To PDF\LedStripes_R100.PDF
+>>>>>>> .r20
 ReleaseManaged2=0
 OutputBasePath2=.\
 OutputPathMedia2=[Media Name]
 OutputPathOutputer2=[Output Type]
-OutputFileName2=LedStripes_R100.PDF
+OutputFileName2=LedStripes_R200.PDF
 OpenOutput2=1
 PromptOverwrite2=1
 PublishMethod2=0
@@ -182,7 +190,11 @@ OutputFileName3=
 OpenOutput3=1
 
 [GeneratedFilesSettings]
+<<<<<<< .mine
+RelativeOutputPath2=C:\Users\ct\Documents\PersonalProjects\ledstripes\Hardware\SquarePcb\.\Publish To PDF\LedStripes_R200.PDF
+=======
 RelativeOutputPath2=C:\data\PersonalProjects\ledstripes\Hardware\SquarePcb\.\Publish To PDF\LedStripes_R100.PDF
+>>>>>>> .r20
 OpenOutputs2=1
 RelativeOutputPath3=C:\data\GitViews\HWTestTools\30-0235_VIP-IP\hardware\LedTest\Project Outputs for LedTest\Generate Files\
 OpenOutputs3=1
