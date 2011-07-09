@@ -83,20 +83,20 @@ DocumentPath=Project Outputs for ledstripes\Design Rule Check - ledstripes.html
 DItemRevisionGUID=
 
 [Parameter1]
-Name=DrawnByX
-Value=CT
+Name=RevisionNr
+Value=R2.00
 
 [Parameter2]
-Name=PCB_Nr
-Value=BRD110313/1
-
-[Parameter3]
 Name=ProjectName
 Value=LedStripes_LightTree
 
+[Parameter3]
+Name=PCB_Nr
+Value=BRD110313/2
+
 [Parameter4]
-Name=RevisionNr
-Value=R1.00
+Name=DrawnByX
+Value=CT
 
 [PCBConfiguration1]
 ReleaseItemId=
