@@ -2,7 +2,7 @@
 Version=1.0
 HierarchyMode=0
 ChannelRoomNamingStyle=0
-OutputPath=
+OutputPath=Project Outputs for LongLedPcb
 LogFolderPath=
 ReleasesFolder=
 ReleaseVaultGUID=
@@ -40,23 +40,63 @@ AnnotateScope=All
 AnnotateOrder=0
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=0
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+
+[Document2]
+DocumentPath=BRD110709.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 
+[Document3]
+DocumentPath=D'tron.OutJob
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for LongLedPcb\Design Rule Check - BRD110709.html
+DItemRevisionGUID=
+
 [Parameter1]
 Name=RevisionNr
 Value=0.00
 
 [Parameter2]
+Name=PCB_Nr
+Value=BRD110329/0
+
+[Parameter3]
 Name=DrawnByX
 Value=CT
 
-[Parameter3]
-Name=PCB_Nr
-Value=BRD110329/0
+[Parameter4]
+Name=ProjectNaam
+Value=LongPCB-Leduino
 
 [PCBConfiguration1]
 ReleaseItemId=
@@ -853,10 +893,10 @@ GlobalIndexSortOrder=3
 [PrjClassGen]
 CompClassManualEnabled=0
 CompClassManualRoomEnabled=0
-NetClassAutoBusEnabled=1
+NetClassAutoBusEnabled=0
 NetClassAutoCompEnabled=0
 NetClassAutoNamedHarnessEnabled=0
-NetClassManualEnabled=1
+NetClassManualEnabled=0
 
 [LibraryUpdateOptions]
 SelectedOnly=0
@@ -864,6 +904,7 @@ PartTypes=0
 FullReplace=1
 UpdateDesignatorLock=1
 UpdatePartIDLock=1
+PreserveParameterLocations=1
 DoGraphics=1
 DoParameters=1
 DoModels=1
@@ -884,4 +925,7 @@ ComparisonOptions2=Kind=Component Class|MinPercent=75|MinMatch=3|ShowMatch=-1|Co
 ComparisonOptions3=Kind=Rule|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
 ComparisonOptions4=Kind=Differential Pair|MinPercent=50|MinMatch=1|ShowMatch=0|Confirm=0|UseName=0|InclAllRules=0
 ComparisonOptions5=Kind=Structure Class|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
+
+[SmartPDF]
+PageOptions=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
 
