@@ -30,7 +30,9 @@ const long BT_KEY_DOWN=0x1120;
 const long BT_KEY_LEFT=0x11D7;
 const long BT_KEY_RIGHT=0x11D8;
 
-const unsigned long TIMEOUT_MS=1000;
+//Timeout in milliseconds is used during random mode.  It determines how fast the LEDs change color.  Now it's set to 1000, so every second the intensity of 
+//the LEDs will be updated.
+const unsigned long TIMEOUT_MS=10000;
 
 //Using exponential intensity changes, because the eye response is logarithmically. (Use linear changes for output values near 255 and you'll see what I mean).
 const byte nrOfIntensities=40;
@@ -56,14 +58,16 @@ const byte ACTIVE=1;      //LEDs are on and color is constant
 
 //Initialize the IR-remote receiver
 SharpIR sharpIR(RECV_PIN);
+
 //Set up LED strings
-RGBcontrol string1(2,3,4);
-RGBcontrol string2(7,8,9);
-RGBcontrol string3(10,11,12);
+//RGBcontrol string1(5,6,13,nrOfIntensities);    //LED string for debugging purposes
+RGBcontrol string1(2,3,4,nrOfIntensities);
+RGBcontrol string2(7,8,9,nrOfIntensities);
+RGBcontrol string3(10,11,12,nrOfIntensities);
 
 void setup()
 {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   //Random number generator is used during "CHANGING" state.  Otherwise the color changes are always the same.
   randomSeed(analogRead(0));
   //Start waiting for IR-messages
@@ -80,8 +84,8 @@ void loop()
   static byte lState=SLEEPING;   //state of the state machine (sleeping, active or changing)
   byte intens;
   byte pin;
-  static byte ledOnState=7;        //Holds the status of the different LED strings (ON or OFF)
-
+  static byte ledOnState=7;      //Holds the status of the different LED strings (ON or OFF)
+  
   //Change state when user pressed button on the remote control
   if(sharpIR.SharpDecode(&yAddress, &uiCommand)==sharpIR.DECODED)
   {
@@ -107,17 +111,17 @@ void loop()
           if(string1.isRandom()){
             string1.setFix();
           }else{
-            string1.setRandom(nrOfIntensities,50);
+            string1.setRandom(TIMEOUT_MS);
           }
           if(string2.isRandom()){
             string2.setFix();
           }else{
-            string2.setRandom(nrOfIntensities,50);
+            string2.setRandom(TIMEOUT_MS);
           }
           if(string3.isRandom()){
             string3.setFix();
           }else{
-            string3.setRandom(nrOfIntensities,50);
+            string3.setRandom(TIMEOUT_MS);
           }
         }
         break;
@@ -155,9 +159,9 @@ void loop()
     }
     if(lIRdata==BT_VOL_UP || lIRdata==BT_KEY_RIGHT){
       //increase intensity
-      string1.increaseIntensity(nrOfIntensities);
-      string2.increaseIntensity(nrOfIntensities);
-      string3.increaseIntensity(nrOfIntensities);
+      string1.increaseIntensity();
+      string2.increaseIntensity();
+      string3.increaseIntensity();
     }
     if(lIRdata==BT_VOL_DOWN || lIRdata==BT_KEY_LEFT){
       //decrease intensity
@@ -198,6 +202,10 @@ void loop()
   }else{
     string3.lightsOut();
   }
+  
+  string1.updateRandom();
+  string2.updateRandom();
+  string3.updateRandom();
  
   //Write the analog values to the IO pins.
   for(byte i=0;i<3;i++)
@@ -209,6 +217,9 @@ void loop()
    string3.getPinIntensity(i,&pin,&intens);
    analogWrite(pin, intensity[intens]);
   }
+ 
+  
+  
 }//loop
 
 
