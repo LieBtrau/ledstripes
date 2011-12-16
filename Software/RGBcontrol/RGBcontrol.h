@@ -3,7 +3,8 @@
 #ifndef RGBcontrol_h
 #define RGBcontrol_h
 
-#include "WProgram.h"
+//#include "WProgram.h"
+typedef unsigned char byte;
 
 typedef enum{
 	RANDOM_SET_NEW_VAL,

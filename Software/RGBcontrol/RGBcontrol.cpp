@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include <Arduino.h>
 #include "RGBcontrol.h"
 
 RGBcontrol::RGBcontrol(byte Rpin, byte Gpin, byte Bpin, byte nrOfIntensities){
@@ -88,6 +88,21 @@ void RGBcontrol::setRandom(unsigned long b){
 
 /*Fade a light by PWM. First RGB-value is arr1, this gradually
  *	changes to arr2.
+ * Timeline is like this:
+ * (PWM_resolution*TIMEOUT) old value	/
+ * 0 new value							/		Repeat this sequence REPEAT TIMES
+ *
+ * (PWM_resolution-1)* TIMEOUT old value	/	Repeat this sequence REPEAT TIMES
+ *	1 new value								/
+ *
+ * (PWM_resolution-2)* TIMEOUT old value	/	Repeat this sequence REPEAT TIMES
+ *	2 new value								/
+ *
+ * ....
+ *
+ * (0)* TIMEOUT old value				/	Repeat this sequence REPEAT TIMES
+ *	PWM_resolution new value			/
+
  *\param bRestart		set to true to start the fading cycle from the beginning
  *\param arr1			original RGB-value
  *\param arr2			the new RGB-value.  That's where it will fade to.
@@ -96,6 +111,7 @@ void RGBcontrol::setRandom(unsigned long b){
  */
 bool RGBcontrol::PWM_RGB(bool bRestart, byte* arr1, byte* arr2, byte* out){
   const unsigned long TIMEOUT=1;
+  const unsigned long REPEAT=5;
   const byte PWM_RESOLUTION=20;
   static byte state=0;
   static unsigned long endTime;
@@ -110,7 +126,7 @@ bool RGBcontrol::PWM_RGB(bool bRestart, byte* arr1, byte* arr2, byte* out){
   case 0:
     loopCounter=PWM_RESOLUTION;
     state=1;
-    repeat=5;
+    repeat=REPEAT;
     break;
   case 1:
     //First show old value

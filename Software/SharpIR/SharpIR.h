@@ -6,7 +6,7 @@
 #ifndef SharpIR_h
 #define SharpIR_h
 
-#include "WProgram.h"
+typedef unsigned char byte;
 #include "IRremote.h"
 
 class SharpIR

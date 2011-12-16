@@ -11,6 +11,7 @@
 
 #include "IRremote.h"
 #include "IRremoteInt.h"
+#include <Arduino.h>
 
 // Provides ISR
 #include <avr/interrupt.h>
