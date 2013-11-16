@@ -13,9 +13,6 @@
 #include "IRremoteInt.h"
 #include <Arduino.h>
 
-// Provides ISR
-#include <avr/interrupt.h>
-
 volatile irparams_t irparams;
 
 // These versions of MATCH, MATCH_MARK, and MATCH_SPACE are only for debugging.

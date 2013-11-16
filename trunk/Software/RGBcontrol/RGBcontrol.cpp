@@ -1,258 +1,164 @@
+//http://www.kasperkamperman.com/blog/arduino/arduino-programming-hsb-to-rgb/
+
 #include <Arduino.h>
 #include "RGBcontrol.h"
 
-RGBcontrol::RGBcontrol(byte Rpin, byte Gpin, byte Bpin, byte nrOfIntensities){
+/* 
+  dim_curve 'lookup table' to compensate for the nonlinearity of human vision.
+  Used in the getRGB function on saturation and brightness to make 'dimming' look more natural. 
+  Exponential function used to create lightnessues below : 
+  x from 0 - 255 : y = round(pow( 2.0, x+64/40.0) - 1)   
+*/
+const byte dim_curve[] = {
+    0,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4,   4,
+    4,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,
+    6,   6,   6,   6,   6,   7,   7,   7,   7,   7,   7,   7,   8,   8,   8,   8,
+    8,   8,   9,   9,   9,   9,   9,   9,   10,  10,  10,  10,  10,  11,  11,  11,
+    11,  11,  12,  12,  12,  12,  12,  13,  13,  13,  13,  14,  14,  14,  14,  15,
+    15,  15,  16,  16,  16,  16,  17,  17,  17,  18,  18,  18,  19,  19,  19,  20,
+    20,  20,  21,  21,  22,  22,  22,  23,  23,  24,  24,  25,  25,  25,  26,  26,
+    27,  27,  28,  28,  29,  29,  30,  30,  31,  32,  32,  33,  33,  34,  35,  35,
+    36,  36,  37,  38,  38,  39,  40,  40,  41,  42,  43,  43,  44,  45,  46,  47,
+    48,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,
+    63,  64,  65,  66,  68,  69,  70,  71,  73,  74,  75,  76,  78,  79,  81,  82,
+    83,  85,  86,  88,  90,  91,  93,  94,  96,  98,  99,  101, 103, 105, 107, 109,
+    110, 112, 114, 116, 118, 121, 123, 125, 127, 129, 132, 134, 136, 139, 141, 144,
+    146, 149, 151, 154, 157, 159, 162, 165, 168, 171, 174, 177, 180, 183, 186, 190,
+    193, 196, 200, 203, 207, 211, 214, 218, 222, 226, 230, 234, 238, 242, 248, 255,
+};
+
+RGBcontrol::RGBcontrol(byte Rpin, byte Gpin, byte Bpin){
 	_pinNrs[0]=Rpin;
 	_pinNrs[1]=Gpin;
 	_pinNrs[2]=Bpin;
-	_colVal[0]=20;
-	_colVal[1]=20;
-	_colVal[2]=20;
-	_bOn=true;
-	_nrOfIntensities=nrOfIntensities;
+	_hue=180;
+	_saturation=128;
+	_lightness=128;
 }
 
-void RGBcontrol::setColor(byte R, byte G, byte B){
-	if(_bOn){
-		_bRandom=false;
-		_colVal[0]=R;
-		_colVal[1]=G;
-		_colVal[2]=B;
-	}
+void RGBcontrol::updateLEDs(){
+	// getRGB function stores RGB lightnessues in this array
+	// use these lightnessues for the red, blue, green led. 
+	int rgb_colors[3]; 
+	static int fadeSpeed=1;
+  getRGB(_hue,_saturation,_lightness,rgb_colors);   // converts HSB to RGB
+      
+  analogWrite(_pinNrs[0], rgb_colors[0]);            // red lightnessue in index 0 of rgb_colors array
+  analogWrite(_pinNrs[1], rgb_colors[1]);            // green lightnessue in index 1 of rgb_colors array
+  analogWrite(_pinNrs[2], rgb_colors[2]);            // blue lightnessue in index 2 of rgb_colors array
+
+  // fade from 0 - 255 and back with a certain speed   
+  _hue = _hue + fadeSpeed;         // change fadelightness by speed
+  _hue = constrain(_hue, 0, 255);  // keep fadelightness between 0 and 255
+  
+  if(_hue==255 || _hue==0)         // change from up>down or down-up (negative/positive)
+  { fadeSpeed = -fadeSpeed;  
+  }  
 }
 
-void RGBcontrol::updateRandom(){
-	if(_bRandom){
-		randomizeIntensity();
-	}
+void RGBcontrol::increaseHue()
+{
+	_hue=(_hue<359?_hue+1:359);
 }
 
-bool RGBcontrol::getPinIntensity(byte color, byte* pin, byte* intensity){
-	if(color>2){
-		return false;
-	}
-	*pin=_pinNrs[color];
-	if(!_bOn){
-		*intensity=0;
-	}else{
-		*intensity=_colVal[color];
-	}
-	return true;
+void RGBcontrol::decreaseHue()
+{
+	_hue=(_hue>0?_hue-1:0);
 }
 
-void RGBcontrol::increaseIntensity(){
-	if(_bOn){
-		for(byte i=0;i<3;i++){
-			if(_colVal[i]<(_nrOfIntensities-1)){
-				_colVal[i]++;
-			}
-		}
-	}
+void RGBcontrol::increaseSaturation()
+{
+	_saturation=(_saturation<255?_saturation+1:255);
 }
 
-void RGBcontrol::decreaseIntensity(){
-	if(_bOn){
-		for(byte i=0;i<3;i++){
-			if(_colVal[i]>0){
-				_colVal[i]--;
-			}
-		}
-	}
+void RGBcontrol::decreaseSaturation()
+{
+	_saturation=(_saturation>0?_saturation-1:0);
+}
+
+void RGBcontrol::increaseIntensity()
+{
+	_lightness=(_lightness<255?_lightness+1:255);
+}
+
+void RGBcontrol::decreaseIntensity()
+{
+	_lightness=(_lightness>0?_lightness-1:0);
 }
 
 void RGBcontrol::lightsOut(){
-	_bOn=false;
+	_lightness=0;
 }
 
 void RGBcontrol::lightsOn(){
-	_bOn=true;
+	_lightness=128;
 }
 
-bool RGBcontrol::isRandom(){
-	return _bRandom;
-}
-
-bool RGBcontrol::setFix(){
-	if(_bOn){
-		_bRandom=false;
-	}
-}
-
-void RGBcontrol::setRandom(unsigned long b){
-	if(_bOn){
-		_bRandom=true;
-		_state=RANDOM_SET_NEW_VAL;
-		_timeout_ms=b;
-	}
-}
-
-/*Fade a light by PWM. First RGB-value is arr1, this gradually
- *	changes to arr2.
- * Timeline is like this:
- * (PWM_resolution*TIMEOUT) old value	/
- * 0 new value							/		Repeat this sequence REPEAT TIMES
- *
- * (PWM_resolution-1)* TIMEOUT old value	/	Repeat this sequence REPEAT TIMES
- *	1 new value								/
- *
- * (PWM_resolution-2)* TIMEOUT old value	/	Repeat this sequence REPEAT TIMES
- *	2 new value								/
- *
- * ....
- *
- * (0)* TIMEOUT old value				/	Repeat this sequence REPEAT TIMES
- *	PWM_resolution new value			/
-
- *\param bRestart		set to true to start the fading cycle from the beginning
- *\param arr1			original RGB-value
- *\param arr2			the new RGB-value.  That's where it will fade to.
- *\param out			the current fading RGB-output value
- *\return				true when fading cycle ended, else false.
- */
-bool RGBcontrol::PWM_RGB(bool bRestart, byte* arr1, byte* arr2, byte* out){
-  const unsigned long TIMEOUT=1;
-  const unsigned long REPEAT=5;
-  const byte PWM_RESOLUTION=20;
-  static byte state=0;
-  static unsigned long endTime;
-  static byte loopCounter;
-  static byte repeat;
-
-  if(bRestart){
-    state=0;
-  }
-
-  switch(state){
-  case 0:
-    loopCounter=PWM_RESOLUTION;
-    state=1;
-    repeat=REPEAT;
-    break;
-  case 1:
-    //First show old value
-    for(byte i=0;i<3;i++){
-      out[i]=arr1[i];
-    }
-    endTime=millis()+loopCounter*TIMEOUT;
-    state=2;
-    break;
-  case 2:
-    //Wait some time
-    if(millis()>endTime){
-      state=3;
-    }
-    break;
-  case 3:
-    //Show new value now
-    for(byte i=0;i<3;i++){
-      out[i]=arr2[i];
-    }
-    endTime=millis()+(PWM_RESOLUTION-loopCounter)*TIMEOUT;
-    state=4;
-    break;
-  case 4:
-    //Wait some time again
-    if(millis()>endTime){
-      if(repeat-->0){
-        state=1;
-      }
-      else{
-        if(loopCounter-->0){
-          repeat=5;
-          state=1;
-        }
-        else{
-          state=5;
-          return true;
-        }
-      }
-//      Serial.print(repeat,DEC);
-//      Serial.print(" ");
-//      Serial.println(loopCounter,DEC);
-    }
-    break;
-  case 5:
-    break;
-  }
-  return false;
-}
-
-/* State machine that takes care of the random color changes.
- * The first stage defines a new desired color (R,G,B).  To avoid that the
- * intensity of the new color would be very different from the current color,
- * the total lightlevel of the three LEDs will remain unchanged.
- * In the second state, the color indices are increased, so that the intensity
- * of each LED approaches the desired index for that LED (R, G or B).
- * If the desired color is attained, then a new random color is chosen and the
- * process starts anew. 
- */
-void RGBcontrol::randomizeIntensity(){
-  static byte desired[3];
-  static byte oldVal[3];
-  static byte tempVal[3];
-  int total;
-  unsigned int intensity;
-  static unsigned long startTime;
-  unsigned long diffTime;
-  int desTotal;
- 
-  switch(_state){
-    case RANDOM_SET_NEW_VAL:
-      //Set a new random desired color
-      total=_colVal[0] + _colVal[1] + _colVal[2];
-	  for(byte i=0;i<3;i++){
-		  desired[i]=random(min(_nrOfIntensities-1,total));
-			tempVal[i]=_colVal[i];
-	  }
-	  do{
-		  for(byte i=0;i<3;i++){
-			  desTotal=desired[0]+desired[1]+desired[2];
-			  if(desTotal>total && desired[i]>0){
-				desired[i]--;
-			  }
-			  if(desTotal<total && desired[i]<(_nrOfIntensities-1)){
-				desired[i]++;
-			  }
-		  }
-	  }while(total!=desired[0]+desired[1]+desired[2]);
-      _state=RANDOM_GO_TO_VAL;
-      break;
-     case RANDOM_GO_TO_VAL:
-       //Bring the current color closer to the desired one.
-       for(byte i=0;i<3;i++){
-	     //save current light value, so that we can show it mixed with the new value
-		 oldVal[i]=tempVal[i];
-         if(tempVal[i]>desired[i]){
-           tempVal[i]--;
-         }
-         if(tempVal[i]<desired[i]){
-           tempVal[i]++;
-         }
-       }
-       if((tempVal[0]==desired[0]) && (tempVal[1]==desired[1]) && (tempVal[2]==desired[2])){
-			//desired color is reached, set a new color
-			_state=RANDOM_SET_NEW_VAL;
-       }else{
-			//start fading from the current level to the new tempVal-level.
-			PWM_RGB(true,oldVal,tempVal,_colVal);
-			_state=FADE_LIGHT;
-       }
-       break;
-	 case FADE_LIGHT:
-		if(PWM_RGB(false,oldVal,tempVal,_colVal)){
-			//Start the delay loop
-			startTime=millis();
-			_state=RANDOM_WAIT;
-		 }
-		break;
-     case RANDOM_WAIT:
-       //Delay loop
-       if(millis()-startTime > _timeout_ms){
-         _state=RANDOM_GO_TO_VAL;
-       }
+void RGBcontrol::getRGB(int hue, int sat, int lightness, int colors[3]) { 
+  /* convert hue, saturation and brightness ( HSB/HSV ) to RGB
+     The dim_curve is used only on brightness/lightnessue and on saturation (inverted).
+     This looks the most natural.      
+  */
+  
+  lightness = dim_curve[lightness];
+  sat = 255-dim_curve[255-sat];
+  
+  int r;
+  int g;
+  int b;
+  int base;
+  
+  if (sat == 0) { // Acromatic color (gray). Hue doesn't mind.
+    colors[0]=lightness;
+    colors[1]=lightness;
+    colors[2]=lightness;  
+  } else  { 
+    
+    base = ((255 - sat) * lightness)>>8;
+  
+    switch(hue/60) {
+	case 0:
+		r = lightness;
+		g = (((lightness-base)*hue)/60)+base;
+		b = base;
 	break;
-  }
+	
+	case 1:
+		r = (((lightness-base)*(60-(hue%60)))/60)+base;
+		g = lightness;
+		b = base;
+	break;
+	
+	case 2:
+		r = base;
+		g = lightness;
+		b = (((lightness-base)*(hue%60))/60)+base;
+	break;
+	
+	case 3:
+		r = base;
+		g = (((lightness-base)*(60-(hue%60)))/60)+base;
+		b = lightness;
+	break;
+	
+	case 4:
+		r = (((lightness-base)*(hue%60))/60)+base;
+		g = base;
+		b = lightness;
+	break;
+	
+	case 5:
+		r = lightness;
+		g = base;
+		b = (((lightness-base)*(60-(hue%60)))/60)+base;
+	break;
+    }
+      
+    colors[0]=r;
+    colors[1]=g;
+    colors[2]=b; 
+  }   
+
 }
-
-
 
