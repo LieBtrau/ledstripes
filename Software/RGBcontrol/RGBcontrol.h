@@ -3,7 +3,6 @@
 #ifndef RGBcontrol_h
 #define RGBcontrol_h
 
-//#include "WProgram.h"
 typedef unsigned char byte;
 
 typedef enum{
@@ -16,27 +15,22 @@ typedef enum{
 class RGBcontrol
 {
   public:
-	RGBcontrol(byte Rpin, byte Gpin, byte Bpin, byte nrOfIntensities);
+	RGBcontrol(byte Rpin, byte Gpin, byte Bpin);
+	void updateLEDs();
+	void increaseHue();
+	void decreaseHue();
 	void increaseIntensity();
 	void decreaseIntensity();
+	void increaseSaturation();
+	void decreaseSaturation();
 	void lightsOut();
 	void lightsOn();
-	void setColor(byte R, byte G, byte B);
-	bool getPinIntensity(byte color, byte* pin, byte* intensity);
-	void setRandom(unsigned long timeout_ms);
-	bool setFix();
-	void updateRandom();
-	bool isRandom();
   private:
-	void randomizeIntensity();
-	bool PWM_RGB(bool bRestart, byte* arr1, byte* arr2, byte* out);
-	byte _colVal[3];
+	void getRGB(int hue, int sat, int val, int colors[3]);
+	int _hue;
+	int _saturation;
+	int _lightness;
 	byte _pinNrs[3];
-	unsigned long _timeout_ms;
-	byte _nrOfIntensities;
-	bool _bOn;
-	bool _bRandom;
-	RANDOM_STATE _state;
 };
 
 #endif
